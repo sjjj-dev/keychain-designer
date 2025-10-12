@@ -11,16 +11,12 @@ from backend.db.models import Base
 def build_sample_chain(session, user):
     # Create a chain and a root ring
     chain = crud.create_chain(session, user_id=user.id, name="Sample Chain")
-    root = crud.create_ring(
-        session, chain_id=chain.id, name="Root Ring", color="SILVER"
-    )
+    root = crud.create_ring(session, chain_id=chain.id, name="Root Ring", color="SILVER")
     # Set root_id on chain
     crud.update_chain(session, chain_id=chain.id, root_id=root.id)
 
     # Create child rings
-    child1 = crud.create_ring(
-        session, chain_id=chain.id, name="Child Ring 1", color="GOLD", parent_id=root.id
-    )
+    child1 = crud.create_ring(session, chain_id=chain.id, name="Child Ring 1", color="GOLD", parent_id=root.id)
     child2 = crud.create_ring(
         session,
         chain_id=chain.id,
@@ -39,9 +35,7 @@ def build_sample_chain(session, user):
     )
 
     # Keys attached to various rings
-    key_root = crud.create_key(
-        session, chain_id=chain.id, name="Root Key", color="RED", parent_id=root.id
-    )
+    key_root = crud.create_key(session, chain_id=chain.id, name="Root Key", color="RED", parent_id=root.id)
     key_child1 = crud.create_key(
         session,
         chain_id=chain.id,
@@ -58,9 +52,7 @@ def build_sample_chain(session, user):
     )
 
     # Charms attached to various rings
-    charm_root = crud.create_charm(
-        session, chain_id=chain.id, name="Root Charm", type="Star", parent_id=root.id
-    )
+    charm_root = crud.create_charm(session, chain_id=chain.id, name="Root Charm", type="Star", parent_id=root.id)
     charm_child2 = crud.create_charm(
         session,
         chain_id=chain.id,
@@ -74,9 +66,7 @@ def build_sample_chain(session, user):
 
 def print_tree(node, indent=0):
     pad = "  " * indent
-    print(
-        f"{pad}- Ring: {node.ring.name} (id={node.ring.id}) color={getattr(node.ring, 'color', None)}"
-    )
+    print(f"{pad}- Ring: {node.ring.name} (id={node.ring.id}) color={getattr(node.ring, 'color', None)}")
     for k in node.keys:
         print(f"{pad}  * Key: {k.name} (id={k.id}) color={k.color}")
     for c in node.charms:

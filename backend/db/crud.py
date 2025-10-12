@@ -71,10 +71,7 @@ def get_chain(db: Session, chain_id: uuid.UUID) -> Chain | None:
     return db.query(Chain).filter(Chain.id == chain_id).first()
 
 
-def get_chains(
-    db: Session,
-    user_id: uuid.UUID | None = None,
-) -> list[Chain]:
+def get_chains(db: Session, user_id: uuid.UUID | None = None) -> list[Chain]:
     """Return chains optionally filtered by user_id."""
     query = db.query(Chain)
     if user_id:
@@ -83,10 +80,7 @@ def get_chains(
 
 
 def update_chain(
-    db: Session,
-    chain_id: uuid.UUID,
-    name: str | None = None,
-    root_id: uuid.UUID | None = None,
+    db: Session, chain_id: uuid.UUID, name: str | None = None, root_id: uuid.UUID | None = None
 ) -> Chain | None:
     chain = get_chain(db, chain_id)
     if chain:
@@ -127,11 +121,7 @@ def get_ring(db: Session, ring_id: uuid.UUID) -> Ring | None:
     return db.query(Ring).filter(Ring.id == ring_id).first()
 
 
-def get_rings(
-    db: Session,
-    chain_id: uuid.UUID | None = None,
-    parent_id: uuid.UUID | None = None,
-) -> list[Ring]:
+def get_rings(db: Session, chain_id: uuid.UUID | None = None, parent_id: uuid.UUID | None = None) -> list[Ring]:
     """Return rings optionally filtered by chain_id and/or parent_id."""
     query = db.query(Ring)
     if chain_id:
@@ -189,11 +179,7 @@ def get_key(db: Session, key_id: uuid.UUID) -> Key | None:
     return db.query(Key).filter(Key.id == key_id).first()
 
 
-def get_keys(
-    db: Session,
-    chain_id: uuid.UUID | None = None,
-    parent_id: uuid.UUID | None = None,
-) -> list[Key]:
+def get_keys(db: Session, chain_id: uuid.UUID | None = None, parent_id: uuid.UUID | None = None) -> list[Key]:
     """Return keys optionally filtered by chain_id and/or parent_id."""
     query = db.query(Key)
     if chain_id:
@@ -251,11 +237,7 @@ def get_charm(db: Session, charm_id: uuid.UUID) -> Charm | None:
     return db.query(Charm).filter(Charm.id == charm_id).first()
 
 
-def get_charms(
-    db: Session,
-    chain_id: uuid.UUID | None = None,
-    parent_id: uuid.UUID | None = None,
-) -> list[Charm]:
+def get_charms(db: Session, chain_id: uuid.UUID | None = None, parent_id: uuid.UUID | None = None) -> list[Charm]:
     """Return charms optionally filtered by chain_id and/or parent_id."""
     query = db.query(Charm)
     if chain_id:

@@ -23,20 +23,14 @@ for _ in range(5):
     crud.create_user(db_session, email=email, display_name=display_name)
 
     # Read user
-    user = crud.get_user(
-        db_session, user_id=crud.get_user_by_email(db_session, email=email).id
-    )
-    print(
-        f"Created User ID: {user.id}, Email: {user.email}, Display Name: {user.display_name}"
-    )
+    user = crud.get_user(db_session, user_id=crud.get_user_by_email(db_session, email=email).id)
+    print(f"Created User ID: {user.id}, Email: {user.email}, Display Name: {user.display_name}")
 
     # Update user
     new_display_name = random_display_name()
     crud.update_user(db_session, user_id=user.id, display_name=new_display_name)
     updated_user = crud.get_user(db_session, user_id=user.id)
-    print(
-        f"Updated User ID: {updated_user.id}, Email: {updated_user.email}, Display Name: {updated_user.display_name}"
-    )
+    print(f"Updated User ID: {updated_user.id}, Email: {updated_user.email}, Display Name: {updated_user.display_name}")
 
 # Read all users and delete them
 users = crud.get_all_users(db_session)
@@ -87,12 +81,8 @@ print(f"Deleted Ring ID: {ring.id}")
 
 
 # Key CRUD
-ring = crud.create_ring(
-    db_session, chain_id=chain.id, name="Ring for Key", color="SILVER"
-)
-key = crud.create_key(
-    db_session, chain_id=chain.id, name="Test Key", color="RED", parent_id=ring.id
-)
+ring = crud.create_ring(db_session, chain_id=chain.id, name="Ring for Key", color="SILVER")
+key = crud.create_key(db_session, chain_id=chain.id, name="Test Key", color="RED", parent_id=ring.id)
 print(f"Created Key ID: {key.id}, Name: {key.name}, Color: {key.color}")
 
 key = crud.get_key(db_session, key_id=key.id)
@@ -109,9 +99,7 @@ print(f"Deleted Key ID: {key.id}")
 
 
 # Charm CRUD
-charm = crud.create_charm(
-    db_session, chain_id=chain.id, name="Test Charm", type="Star", parent_id=ring.id
-)
+charm = crud.create_charm(db_session, chain_id=chain.id, name="Test Charm", type="Star", parent_id=ring.id)
 print(f"Created Charm ID: {charm.id}, Name: {charm.name}, Type: {charm.type}")
 
 charm = crud.get_charm(db_session, charm_id=charm.id)

@@ -87,9 +87,7 @@ def create_ring(r: RingCreate, db: Session = Depends(get_session)):
     # Validate chain exists
     if not crud.get_chain(db, chain_id=r.chain_id):
         raise HTTPException(status_code=404, detail="chain not found")
-    created = crud.create_ring(
-        db, chain_id=r.chain_id, name=r.name, color=r.color, parent_id=r.parent_id
-    )
+    created = crud.create_ring(db, chain_id=r.chain_id, name=r.name, color=r.color, parent_id=r.parent_id)
     return created
 
 
@@ -119,9 +117,7 @@ def list_rings(
 def create_key(k: KeyCreate, db: Session = Depends(get_session)):
     if not crud.get_chain(db, chain_id=k.chain_id):
         raise HTTPException(status_code=404, detail="chain not found")
-    created = crud.create_key(
-        db, chain_id=k.chain_id, name=k.name, color=k.color, parent_id=k.parent_id
-    )
+    created = crud.create_key(db, chain_id=k.chain_id, name=k.name, color=k.color, parent_id=k.parent_id)
     return created
 
 
@@ -151,9 +147,7 @@ def list_keys(
 def create_charm(c: CharmCreate, db: Session = Depends(get_session)):
     if not crud.get_chain(db, chain_id=c.chain_id):
         raise HTTPException(status_code=404, detail="chain not found")
-    created = crud.create_charm(
-        db, chain_id=c.chain_id, name=c.name, type=c.type, parent_id=c.parent_id
-    )
+    created = crud.create_charm(db, chain_id=c.chain_id, name=c.name, type=c.type, parent_id=c.parent_id)
     return created
 
 
