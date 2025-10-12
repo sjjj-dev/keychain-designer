@@ -1,0 +1,6 @@
+@import 'flowbite';
+@import "tailwindcss";
+
+body {
+	background-color: #111827;
+}
