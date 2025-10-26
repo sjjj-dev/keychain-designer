@@ -50,6 +50,11 @@ def get_user(user_id: uuid.UUID, db: Session = Depends(get_session)):
     return u
 
 
+@app.get("/users", response_model=List[UserRead])
+def list_users(db: Session = Depends(get_session)):
+    return crud.get_all_users(db)
+
+
 # -----------------
 # Chains
 # -----------------
@@ -74,7 +79,7 @@ def get_chain(chain_id: uuid.UUID, db: Session = Depends(get_session)):
 
 @app.get("/chains", response_model=List[ChainRead])
 def list_chains(user_id: uuid.UUID, db: Session = Depends(get_session)):
-    return crud.get_all_chains_by_user(db, user_id=user_id)
+    return crud.get_chains(db, user_id=user_id)
 
 
 # -----------------
@@ -88,6 +93,9 @@ def create_ring(r: RingCreate, db: Session = Depends(get_session)):
     if not crud.get_chain(db, chain_id=r.chain_id):
         raise HTTPException(status_code=404, detail="chain not found")
     created = crud.create_ring(db, chain_id=r.chain_id, name=r.name, color=r.color, parent_id=r.parent_id)
+    # If this is the first ring in the chain, set it as the root
+    if not created.parent_id and not crud.get_chain(db, chain_id=r.chain_id).root_id:
+        crud.update_chain(db, chain_id=r.chain_id, root_id=created.id)
     return created
 
 
@@ -105,12 +113,7 @@ def list_rings(
     parent_id: uuid.UUID | None = None,
     db: Session = Depends(get_session),
 ):
-    query = db.query(db.crud.Ring)
-    if chain_id:
-        query = query.filter(db.crud.Ring.chain_id == chain_id)
-    if parent_id is not None:
-        query = query.filter(db.crud.Ring.parent_id == parent_id)
-    return query.all()
+    return crud.get_rings(db, chain_id=chain_id, parent_id=parent_id)
 
 
 @app.post("/keys", response_model=KeyRead, status_code=status.HTTP_201_CREATED)
@@ -135,12 +138,7 @@ def list_keys(
     parent_id: uuid.UUID | None = None,
     db: Session = Depends(get_session),
 ):
-    query = db.query(db.crud.Key)
-    if chain_id:
-        query = query.filter(db.crud.Key.chain_id == chain_id)
-    if parent_id is not None:
-        query = query.filter(db.crud.Key.parent_id == parent_id)
-    return query.all()
+    return crud.get_keys(db, chain_id=chain_id, parent_id=parent_id)
 
 
 @app.post("/charms", response_model=CharmRead, status_code=status.HTTP_201_CREATED)
@@ -165,9 +163,4 @@ def list_charms(
     parent_id: uuid.UUID | None = None,
     db: Session = Depends(get_session),
 ):
-    query = db.query(db.crud.Charm)
-    if chain_id:
-        query = query.filter(db.crud.Charm.chain_id == chain_id)
-    if parent_id is not None:
-        query = query.filter(db.crud.Charm.parent_id == parent_id)
-    return query.all()
+    return crud.get_charms(db, chain_id=chain_id, parent_id=parent_id)
