@@ -19,8 +19,10 @@
 <main class="grid grid-cols-6 min-h-screen relative">
   <!-- Top left: Buttons -->
   <div class="absolute top-4 left-4 z-10 flex flex-col gap-2">
-    <Button color="blue" class="mb-2 w-32" onclick={() => goto("/list") as any}
-      >Back to List</Button
+    <Button
+      color="blue"
+      class="mb-2 w-32"
+      onclick={() => goto("/dashboard") as any}>Back to List</Button
     >
     <Button color="red" class="w-32" onclick={() => goto("/") as any}
       >Logout</Button

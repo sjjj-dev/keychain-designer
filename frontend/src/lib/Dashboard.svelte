@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Button } from "flowbite-svelte";
   import { goto } from "@mateothegreat/svelte5-router";
-  import { auth } from "../stores/authStore";
+  import { auth } from "./stores/authStore";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
 

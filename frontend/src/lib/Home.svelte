@@ -3,12 +3,13 @@
   import { goto } from "@mateothegreat/svelte5-router";
   import { auth } from "./stores/authStore";
   let username = "";
+  let password = "";
   let error = "";
 
   function handleLogin(e: Event) {
     e.preventDefault();
     if (username.trim()) {
-      auth.set({ loggedIn: true, username });
+      auth.set({ loggedIn: true, username, password });
       goto("/dashboard");
     } else {
       error = "Please enter username.";
@@ -24,6 +25,12 @@
       type="text"
       placeholder="Username"
       bind:value={username}
+    />
+    <Input
+      class="border rounded px-2 py-1"
+      type="password"
+      placeholder="Password"
+      bind:value={password}
     />
     {#if error}
       <div class="text-red-600 text-sm">{error}</div>

@@ -1,8 +1,7 @@
 <script lang="ts">
   import Home from "./lib/Home.svelte";
-  import Dashboard from "./lib/user/Dashboard.svelte";
+  import Dashboard from "./lib/Dashboard.svelte";
   import Designer from "./lib/designer/Designer.svelte";
-  import { Button } from "flowbite-svelte";
   import { Router, type RouteConfig } from "@mateothegreat/svelte5-router";
 
   const routes: RouteConfig[] = [

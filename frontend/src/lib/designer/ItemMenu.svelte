@@ -1,6 +1,4 @@
 <script lang="ts">
-  // Import SVGs as static assets
-  // Vite will resolve these imports at build time
   import ringImg from "../../assets/rings/ring.svg";
   import keyImg from "../../assets/keys/key.svg";
   import charmDiamond from "../../assets/charms/diamond.svg";
