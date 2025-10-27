@@ -24,11 +24,23 @@
         <img
           src={ring.src}
           alt={ring.name}
-          class="w-12 h-12 bg-gray-700 rounded p-1"
+          class="w-12 h-12 bg-gray-700 rounded p-1 cursor-move"
+          draggable="true"
+          ondragstart={(e) => {
+            e.dataTransfer.effectAllowed = "copy";
+            e.dataTransfer.setData(
+              "application/json",
+              JSON.stringify({
+                type: "ring",
+                ...ring,
+              })
+            );
+          }}
         />
       {/each}
     </div>
   </div>
+
   <div>
     <div class="font-bold mb-1">Keys</div>
     <div class="flex flex-row gap-3 items-center">
@@ -36,11 +48,23 @@
         <img
           src={key.src}
           alt={key.name}
-          class="w-12 h-12 bg-gray-700 rounded p-1"
+          class="w-12 h-12 bg-gray-700 rounded p-1 cursor-move"
+          draggable="true"
+          ondragstart={(e) => {
+            e.dataTransfer.effectAllowed = "copy";
+            e.dataTransfer.setData(
+              "application/json",
+              JSON.stringify({
+                type: "key",
+                ...key,
+              })
+            );
+          }}
         />
       {/each}
     </div>
   </div>
+
   <div>
     <div class="font-bold mb-1">Charms</div>
     <div class="flex flex-col gap-3 items-center">
@@ -48,7 +72,18 @@
         <img
           src={charm.src}
           alt={charm.name}
-          class="w-12 h-12 bg-gray-700 rounded p-1"
+          class="w-12 h-12 bg-gray-700 rounded p-1 cursor-move"
+          draggable="true"
+          ondragstart={(e) => {
+            e.dataTransfer.effectAllowed = "copy";
+            e.dataTransfer.setData(
+              "application/json",
+              JSON.stringify({
+                type: "charm",
+                ...charm,
+              })
+            );
+          }}
         />
       {/each}
     </div>

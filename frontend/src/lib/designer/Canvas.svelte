@@ -29,15 +29,32 @@
 
     <!-- Keys, Charms, and Child Rings -->
     <div class="flex flex-row gap-6 mt-2">
-      <!-- Blank -->
+      <!-- Blank Drop Zone -->
       <div
         class="w-16 h-16 border-2 border-dashed border-gray-600 rounded-lg flex items-center justify-center hover:border-blue-400 transition-colors cursor-pointer"
         role="button"
         tabindex="0"
         aria-label="Drop items here"
+        ondragover={(e) => {
+          e.preventDefault();
+          e.currentTarget.classList.add("border-blue-400", "bg-blue-900/20");
+        }}
+        ondragleave={(e) => {
+          e.currentTarget.classList.remove("border-blue-400", "bg-blue-900/20");
+        }}
+        ondrop={(e) => {
+          e.preventDefault();
+          e.currentTarget.classList.remove("border-blue-400", "bg-blue-900/20");
+
+          const data = JSON.parse(e.dataTransfer.getData("application/json"));
+          alert(`Dropped ${data.type}: ${data.name} onto ring ${ring.name}`);
+
+          // You can also add the item to your ring here
+          // ring.keys.push(data) or ring.charms.push(data), etc.
+        }}
       >
         <svg
-          class="w-8 h-8 text-gray-600"
+          class="w-8 h-8 text-gray-600 pointer-events-none"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
