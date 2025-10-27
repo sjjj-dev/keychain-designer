@@ -14,6 +14,11 @@
     { name: "Moon", src: charmMoon },
     { name: "Star", src: charmStar },
   ];
+
+  function handleDragStart(e: DragEvent, charm: any) {
+    e.dataTransfer!.effectAllowed = "copy";
+    e.dataTransfer!.setData("application/json", JSON.stringify(charm));
+  }
 </script>
 
 <div class="item-menu space-y-6 p-4 bg-gray-800 rounded text-white">
@@ -74,16 +79,7 @@
           alt={charm.name}
           class="w-12 h-12 bg-gray-700 rounded p-1 cursor-move"
           draggable="true"
-          ondragstart={(e) => {
-            e.dataTransfer.effectAllowed = "copy";
-            e.dataTransfer.setData(
-              "application/json",
-              JSON.stringify({
-                type: "charm",
-                ...charm,
-              })
-            );
-          }}
+          ondragstart={(e) => handleDragStart(e, charm)}
         />
       {/each}
     </div>

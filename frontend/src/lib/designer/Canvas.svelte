@@ -1,6 +1,7 @@
 <script lang="ts">
   import { chainTreeStore } from "../stores/chainStore";
   import type { Ring } from "../types";
+  import DropZone from "./DropZone.svelte";
 
   // Static asset paths for SVGs
   const ringImg = "/src/assets/rings/ring.svg";
@@ -13,9 +14,13 @@
     default: "/src/assets/charms/diamond.svg",
   };
 
-  // Helper to get charm SVG
   function getCharmImg(type: string): string {
     return charmImgs[type] || charmImgs.default;
+  }
+
+  function handleItemDrop(ring: Ring, item: any) {
+    alert(`Dropped ${item.type}: ${item.name} onto ring ${ring.name}`);
+    // Add logic to update ring with new item
   }
 </script>
 
@@ -29,44 +34,8 @@
 
     <!-- Keys, Charms, and Child Rings -->
     <div class="flex flex-row gap-6 mt-2">
-      <!-- Blank Drop Zone -->
-      <div
-        class="w-16 h-16 border-2 border-dashed border-gray-600 rounded-lg flex items-center justify-center hover:border-blue-400 transition-colors cursor-pointer"
-        role="button"
-        tabindex="0"
-        aria-label="Drop items here"
-        ondragover={(e) => {
-          e.preventDefault();
-          e.currentTarget.classList.add("border-blue-400", "bg-blue-900/20");
-        }}
-        ondragleave={(e) => {
-          e.currentTarget.classList.remove("border-blue-400", "bg-blue-900/20");
-        }}
-        ondrop={(e) => {
-          e.preventDefault();
-          e.currentTarget.classList.remove("border-blue-400", "bg-blue-900/20");
-
-          const data = JSON.parse(e.dataTransfer.getData("application/json"));
-          alert(`Dropped ${data.type}: ${data.name} onto ring ${ring.name}`);
-
-          // You can also add the item to your ring here
-          // ring.keys.push(data) or ring.charms.push(data), etc.
-        }}
-      >
-        <svg
-          class="w-8 h-8 text-gray-600 pointer-events-none"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 4v16m8-8H4"
-          />
-        </svg>
-      </div>
+      <!-- Drop Zone -->
+      <DropZone onDrop={(item) => handleItemDrop(ring, item)} />
 
       <!-- Keys -->
       {#each ring.keys as key (key.id)}
