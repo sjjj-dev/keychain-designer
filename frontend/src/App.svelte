@@ -17,6 +17,10 @@
       path: "/designer",
       component: Designer,
     },
+    {
+      path: "/designer/(?<id>[a-z0-9-]{36})",
+      component: Designer,
+    },
   ];
 </script>
 

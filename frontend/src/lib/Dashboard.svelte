@@ -4,23 +4,28 @@
   import { auth } from "./stores/authStore";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
+  import { KeychainAPI } from "./functions/crud";
 
-  // Dummy keychains
-  let keychains = [
-    { id: 1, name: "Work Keys" },
-    { id: 2, name: "Home Keys" },
-    { id: 3, name: "Gym Keys" },
-  ];
+  const api = new KeychainAPI("http://localhost:8000");
+
+  let keychains = $state([]);
 
   onMount(() => {
     if (!get(auth).loggedIn) {
       goto("/");
     }
+    getChains();
   });
 
-  function openDesigner(id?: number) {
-    // Optionally pass id in the future
-    goto("/designer");
+  function openDesigner(id?: string) {
+    goto(`/designer/${id}`);
+  }
+
+  async function getChains() {
+    let chains = await api.listChains("4d0b150a-e5d0-4ed6-8ecd-c43c34f4866f");
+    for (let chain of chains) {
+      keychains.push({ id: chain.id, name: chain.name });
+    }
   }
 </script>
 
@@ -31,10 +36,8 @@
       >+ Create New Keychain</Button
     >
     {#each keychains as kc}
-      <Button
-        color="light"
-        class="w-full"
-        onclick={() => openDesigner(kc.id) as any}>{kc.name}</Button
+      <Button color="light" class="w-full" onclick={() => openDesigner(kc.id)}
+        >{kc.name}</Button
       >
     {/each}
   </div>

@@ -4,16 +4,28 @@
   import { auth } from "../stores/authStore";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
+  import { KeychainAPI } from "../functions/crud";
 
   import LayerMenu from "./LayerMenu.svelte";
   import ItemMenu from "./ItemMenu.svelte";
   import Canvas from "./Canvas.svelte";
 
+  const api = new KeychainAPI("http://localhost:8000");
+
+  let { route } = $props();
+
   onMount(() => {
     if (!get(auth).loggedIn) {
       goto("/");
     }
+    let chainId = route.result.path.params.id;
+    getTree(chainId);
   });
+
+  async function getTree(chainId: string) {
+    let chain = await api.getChain(chainId);
+    console.log(`Designer ID: ${JSON.stringify(chain)}`);
+  }
 </script>
 
 <main class="grid grid-cols-6 min-h-screen relative">
