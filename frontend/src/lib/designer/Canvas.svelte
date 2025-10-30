@@ -2,6 +2,9 @@
   import { chainTreeStore } from "../stores/chainStore";
   import type { Ring } from "../types";
   import DropZone from "./DropZone.svelte";
+  import { KeychainAPI } from "../functions/crud";
+
+  const api = new KeychainAPI("http://localhost:8000");
 
   // Static asset paths for SVGs
   const ringImg = "/src/assets/rings/ring.svg";
@@ -18,7 +21,7 @@
     return charmImgs[type] || charmImgs.default;
   }
 
-  function handleItemDrop(ring: Ring, item: any) {
+  async function handleItemDrop(ring: Ring, item: any) {
     alert(`Dropped ${item.type}: ${item.name} onto ring ${ring.name}`);
     // Add logic to update ring with new item
   }

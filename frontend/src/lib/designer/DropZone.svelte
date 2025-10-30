@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { Ring } from "../types";
-
   interface Props {
     onDrop: (data: any) => void;
   }
