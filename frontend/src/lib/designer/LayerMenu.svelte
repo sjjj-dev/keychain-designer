@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { chainTreeStore } from "../stores/chainStore";
-  import type { Ring } from "../types";
+  import type { Ring } from "../functions/types";
+  let { chainTree } = $props();
 </script>
 
 {#snippet RingNode(ring: Ring, indent: number = 0)}
@@ -31,8 +31,8 @@
 <div
   class="layer-menu p-2 text-white font-mono text-sm bg-gray-800 rounded max-h-96 overflow-auto"
 >
-  {#if $chainTreeStore}
-    {@render RingNode($chainTreeStore)}
+  {#if chainTree}
+    {@render RingNode(chainTree)}
   {:else}
     <div>No chain loaded.</div>
   {/if}

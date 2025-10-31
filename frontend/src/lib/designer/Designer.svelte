@@ -4,27 +4,24 @@
   import { auth } from "../stores/authStore";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
-  import { KeychainAPI } from "../functions/crud";
-
+  import { getTree } from "../functions/utils";
   import LayerMenu from "./LayerMenu.svelte";
   import ItemMenu from "./ItemMenu.svelte";
   import Canvas from "./Canvas.svelte";
 
-  const api = new KeychainAPI("http://localhost:8000");
-
   let { route } = $props();
+  let chainTree = $state();
 
   onMount(() => {
     if (!get(auth).loggedIn) {
       goto("/");
     }
     let chainId = route.result.path.params.id;
-    getTree(chainId);
+    loadChainTree(chainId);
   });
 
-  async function getTree(chainId: string) {
-    let chain = await api.getChain(chainId);
-    console.log(`Designer ID: ${JSON.stringify(chain)}`);
+  async function loadChainTree(chainId: string) {
+    chainTree = await getTree(chainId);
   }
 </script>
 
@@ -46,11 +43,11 @@
   </div>
   <!-- Center: Canvas -->
   <div class="col-span-4 flex flex-col items-center justify-center">
-    <Canvas />
+    <Canvas {chainTree} />
   </div>
   <!-- Right: LayerMenu -->
   <div class="col-span-1 flex items-center justify-end pr-8">
-    <LayerMenu />
+    <LayerMenu {chainTree} />
   </div>
 </main>
 

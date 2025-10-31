@@ -1,10 +1,8 @@
 <script lang="ts">
-  import { chainTreeStore } from "../stores/chainStore";
-  import type { Ring } from "../types";
+  import type { Ring } from "../functions/types";
   import DropZone from "./DropZone.svelte";
-  import { KeychainAPI } from "../functions/crud";
 
-  const api = new KeychainAPI("http://localhost:8000");
+  let { chainTree } = $props();
 
   // Static asset paths for SVGs
   const ringImg = "/src/assets/rings/ring.svg";
@@ -71,8 +69,8 @@
 <div
   class="canvas-area w-full h-full bg-gray-900 flex flex-col items-center overflow-auto p-8"
 >
-  {#if $chainTreeStore}
-    {@render RingNode($chainTreeStore)}
+  {#if chainTree}
+    {@render RingNode(chainTree)}
   {:else}
     <div class="text-white">No chain loaded.</div>
   {/if}
