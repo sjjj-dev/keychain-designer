@@ -34,3 +34,40 @@ export async function getTree(chainId: string): Promise<Ring> {
   console.log(`Tree: ${JSON.stringify(tree)}`);
   return tree;
 }
+
+export async function addChainItem(
+  parentId: string,
+  chainId: string,
+  itemType: "ring" | "key" | "charm",
+  name: string,
+  color: string | null,
+  type: string | null
+): Promise<void> {
+  console.log(
+    `Adding item of type ${itemType} with name ${name} to parent ID ${parentId} in chain ID ${chainId}`
+  );
+  if (itemType === "ring") {
+    await api.createRing({
+      parent_id: parentId,
+      chain_id: chainId,
+      name: name,
+      color: color!,
+    });
+  } else if (itemType === "key") {
+    await api.createKey({
+      parent_id: parentId,
+      chain_id: chainId,
+      name: name,
+      color: color!,
+    });
+  } else if (itemType === "charm") {
+    await api.createCharm({
+      parent_id: parentId,
+      chain_id: chainId,
+      name: name,
+      type: type!,
+    });
+  } else {
+    throw new Error(`Unknown item type: ${itemType}`);
+  }
+}

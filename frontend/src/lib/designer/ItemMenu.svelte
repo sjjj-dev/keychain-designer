@@ -6,8 +6,16 @@
   import charmMoon from "../../assets/charms/moon.svg";
   import charmStar from "../../assets/charms/star.svg";
 
-  const ringSvgs = [{ name: "Ring", src: ringImg }];
-  const keySvgs = [{ name: "Key", src: keyImg }];
+  const DEFAULT_RING_COLOR = "SILVER";
+  const DEFAULT_KEY_COLOR = "RED";
+  const DEFAULT_CHARM_TYPE = "HEART";
+
+  const ringSvgs: { name: string; src: string }[] = [
+    { name: "Ring", src: ringImg },
+  ];
+  const keySvgs: { name: string; src: string }[] = [
+    { name: "Key", src: keyImg },
+  ];
   const charmSvgs = [
     { name: "Diamond", src: charmDiamond },
     { name: "Heart", src: charmHeart },
@@ -15,9 +23,12 @@
     { name: "Star", src: charmStar },
   ];
 
-  function handleDragStart(e: DragEvent, charm: any) {
+  // Build the payload that will be attached to the drag event. The consumer
+  // (drop handler) should fill in runtime values like chain_id and parent_id
+  // before calling the API.
+  function handleDragStart(e: DragEvent, payload: Record<string, any>) {
     e.dataTransfer!.effectAllowed = "copy";
-    e.dataTransfer!.setData("application/json", JSON.stringify(charm));
+    e.dataTransfer!.setData("application/json", JSON.stringify(payload));
   }
 </script>
 
@@ -31,16 +42,14 @@
           alt={ring.name}
           class="w-12 h-12 bg-gray-700 rounded p-1 cursor-move"
           draggable="true"
-          ondragstart={(e) => {
-            e.dataTransfer.effectAllowed = "copy";
-            e.dataTransfer.setData(
-              "application/json",
-              JSON.stringify({
-                type: "ring",
-                ...ring,
-              })
-            );
-          }}
+          ondragstart={(e) =>
+            handleDragStart(e, {
+              itemType: "ring",
+              create: {
+                name: ring.name,
+                color: DEFAULT_RING_COLOR,
+              },
+            })}
         />
       {/each}
     </div>
@@ -55,16 +64,14 @@
           alt={key.name}
           class="w-12 h-12 bg-gray-700 rounded p-1 cursor-move"
           draggable="true"
-          ondragstart={(e) => {
-            e.dataTransfer.effectAllowed = "copy";
-            e.dataTransfer.setData(
-              "application/json",
-              JSON.stringify({
-                type: "key",
-                ...key,
-              })
-            );
-          }}
+          ondragstart={(e) =>
+            handleDragStart(e, {
+              itemType: "key",
+              create: {
+                name: key.name,
+                color: DEFAULT_KEY_COLOR,
+              },
+            })}
         />
       {/each}
     </div>
@@ -79,7 +86,14 @@
           alt={charm.name}
           class="w-12 h-12 bg-gray-700 rounded p-1 cursor-move"
           draggable="true"
-          ondragstart={(e) => handleDragStart(e, charm)}
+          ondragstart={(e) =>
+            handleDragStart(e, {
+              itemType: "charm",
+              create: {
+                name: charm.name,
+                type: DEFAULT_CHARM_TYPE,
+              },
+            })}
         />
       {/each}
     </div>

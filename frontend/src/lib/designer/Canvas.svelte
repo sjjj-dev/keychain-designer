@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Ring } from "../functions/types";
+  import { addChainItem, getTree } from "../functions/utils";
   import DropZone from "./DropZone.svelte";
 
   let { chainTree } = $props();
@@ -20,13 +21,37 @@
   }
 
   async function handleItemDrop(ring: Ring, item: any) {
-    alert(`Dropped ${item.type}: ${item.name} onto ring ${ring.name}`);
-    // Add logic to update ring with new item
+    if (item.create.color) {
+      await addChainItem(
+        ring.id,
+        ring.chain_id,
+        item.itemType,
+        item.create.name,
+        item.create.color,
+        null
+      );
+    } else if (item.create.type) {
+      await addChainItem(
+        ring.id,
+        ring.chain_id,
+        item.itemType,
+        item.create.name,
+        null,
+        item.create.type
+      );
+    }
+
+    // Reload the chain tree to reflect the new item
+    chainTree = await getTree(ring.chain_id);
+  }
+
+  async function handleDelete(itemType: string, id: string, chainId: string) {
+    return;
   }
 </script>
 
 {#snippet RingNode(ring: Ring)}
-  <div class="flex flex-col items-center my-4">
+  <div class="relative flex flex-col items-center my-4">
     <!-- Ring itself -->
     <div class="flex flex-col items-center">
       <img src={ringImg} alt="Ring" class="w-16 h-16" />
@@ -40,7 +65,15 @@
 
       <!-- Keys -->
       {#each ring.keys as key (key.id)}
-        <div class="flex flex-col items-center mb-2">
+        <div class="relative flex flex-col items-center mb-2">
+          <button
+            class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
+            onclick={() => handleDelete("key", key.id, ring.chain_id)}
+            aria-label="Delete key"
+            title="Delete"
+          >
+            ×
+          </button>
           <img src={keyImg} alt="Key" class="w-12 h-12" />
           <div class="text-white text-xs mt-1">{key.name}</div>
         </div>
@@ -48,7 +81,15 @@
 
       <!-- Charms -->
       {#each ring.charms as charm (charm.id)}
-        <div class="flex flex-col items-center mb-2">
+        <div class="relative flex flex-col items-center mb-2">
+          <button
+            class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
+            onclick={() => handleDelete("charm", charm.id, ring.chain_id)}
+            aria-label="Delete charm"
+            title="Delete"
+          >
+            ×
+          </button>
           <img
             src={getCharmImg(charm.type)}
             alt={charm.type}
