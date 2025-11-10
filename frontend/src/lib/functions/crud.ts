@@ -92,6 +92,12 @@ class KeychainAPI {
       throw new Error(error.detail || `HTTP ${res.status}`);
     }
 
+    // Some endpoints (DELETE) return 204 No Content. Avoid calling res.json()
+    // when there's no body.
+    if (res.status === 204) {
+      return undefined as unknown as T;
+    }
+
     return res.json();
   }
 
@@ -199,6 +205,19 @@ class KeychainAPI {
     if (params?.parent_id) query.set("parent_id", params.parent_id);
     const queryStr = query.toString();
     return this.request(`/charms${queryStr ? `?${queryStr}` : ""}`);
+  }
+
+  // DELETE helpers
+  async deleteRing(ringId: string): Promise<void> {
+    return this.request<void>(`/rings/${ringId}`, { method: "DELETE" });
+  }
+
+  async deleteKey(keyId: string): Promise<void> {
+    return this.request<void>(`/keys/${keyId}`, { method: "DELETE" });
+  }
+
+  async deleteCharm(charmId: string): Promise<void> {
+    return this.request<void>(`/charms/${charmId}`, { method: "DELETE" });
   }
 }
 

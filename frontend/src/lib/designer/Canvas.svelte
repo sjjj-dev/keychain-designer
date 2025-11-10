@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Ring } from "../functions/types";
-  import { addChainItem, getTree } from "../functions/utils";
+  import { addChainItem, deleteChainItem, getTree } from "../functions/utils";
   import DropZone from "./DropZone.svelte";
 
   let { chainTree } = $props();
@@ -45,8 +45,13 @@
     chainTree = await getTree(ring.chain_id);
   }
 
-  async function handleDelete(itemType: string, id: string, chainId: string) {
-    return;
+  async function handleDelete(
+    itemType: "ring" | "key" | "charm",
+    id: string,
+    chainId: string
+  ) {
+    await deleteChainItem(itemType, id);
+    chainTree = await getTree(chainId);
   }
 </script>
 
@@ -54,6 +59,14 @@
   <div class="relative flex flex-col items-center my-4">
     <!-- Ring itself -->
     <div class="flex flex-col items-center">
+      <button
+        class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
+        onclick={() => handleDelete("ring", ring.id, ring.chain_id)}
+        aria-label="Delete ring"
+        title="Delete"
+      >
+        ×
+      </button>
       <img src={ringImg} alt="Ring" class="w-16 h-16" />
       <div class="text-white text-sm font-bold mt-1">{ring.name}</div>
     </div>

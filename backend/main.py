@@ -126,6 +126,14 @@ def list_rings(
     return crud.get_rings(db, chain_id=chain_id, parent_id=parent_id)
 
 
+@app.delete("/rings/{ring_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_ring(ring_id: uuid.UUID, db: Session = Depends(get_session)):
+    if not crud.get_ring(db, ring_id=ring_id):
+        raise HTTPException(status_code=404, detail="ring not found")
+    crud.delete_ring(db, ring_id=ring_id)
+    return
+
+
 @app.post("/keys", response_model=KeyRead, status_code=status.HTTP_201_CREATED)
 def create_key(k: KeyCreate, db: Session = Depends(get_session)):
     if not crud.get_chain(db, chain_id=k.chain_id):
@@ -151,6 +159,14 @@ def list_keys(
     return crud.get_keys(db, chain_id=chain_id, parent_id=parent_id)
 
 
+@app.delete("/keys/{key_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_key(key_id: uuid.UUID, db: Session = Depends(get_session)):
+    if not crud.get_key(db, key_id=key_id):
+        raise HTTPException(status_code=404, detail="key not found")
+    crud.delete_key(db, key_id=key_id)
+    return
+
+
 @app.post("/charms", response_model=CharmRead, status_code=status.HTTP_201_CREATED)
 def create_charm(c: CharmCreate, db: Session = Depends(get_session)):
     if not crud.get_chain(db, chain_id=c.chain_id):
@@ -174,3 +190,11 @@ def list_charms(
     db: Session = Depends(get_session),
 ):
     return crud.get_charms(db, chain_id=chain_id, parent_id=parent_id)
+
+
+@app.delete("/charms/{charm_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_charm(charm_id: uuid.UUID, db: Session = Depends(get_session)):
+    if not crud.get_charm(db, charm_id=charm_id):
+        raise HTTPException(status_code=404, detail="charm not found")
+    crud.delete_charm(db, charm_id=charm_id)
+    return

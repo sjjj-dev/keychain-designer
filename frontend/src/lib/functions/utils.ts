@@ -71,3 +71,19 @@ export async function addChainItem(
     throw new Error(`Unknown item type: ${itemType}`);
   }
 }
+
+export async function deleteChainItem(
+  itemType: "ring" | "key" | "charm",
+  itemId: string
+): Promise<void> {
+  console.log(`Deleting item of type ${itemType} with ID ${itemId}`);
+  if (itemType === "ring") {
+    await api.deleteRing(itemId);
+  } else if (itemType === "key") {
+    await api.deleteKey(itemId);
+  } else if (itemType === "charm") {
+    await api.deleteCharm(itemId);
+  } else {
+    throw new Error(`Unknown item type: ${itemType}`);
+  }
+}
