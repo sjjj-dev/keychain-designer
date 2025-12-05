@@ -11,12 +11,12 @@
 
   let { route } = $props();
   let chainTree = $state();
+  let chainId = route.result.path.params.id;
 
   onMount(() => {
     if (!get(auth).loggedIn) {
       goto("/");
     }
-    let chainId = route.result.path.params.id;
     loadChainTree(chainId);
   });
 
@@ -43,7 +43,7 @@
   </div>
   <!-- Center: Canvas -->
   <div class="col-span-4 flex flex-col items-center justify-center">
-    <Canvas {chainTree} />
+    <Canvas {chainTree} {chainId} />
   </div>
   <!-- Right: LayerMenu -->
   <div class="col-span-1 flex items-center justify-end pr-8">

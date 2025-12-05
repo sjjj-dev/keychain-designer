@@ -1,9 +1,14 @@
 <script lang="ts">
   import type { Ring } from "../functions/types";
-  import { addChainItem, deleteChainItem, getTree } from "../functions/utils";
+  import {
+    createRootRing,
+    addChainItem,
+    deleteChainItem,
+    getTree,
+  } from "../functions/utils";
   import DropZone from "./DropZone.svelte";
 
-  let { chainTree } = $props();
+  let { chainTree, chainId } = $props();
 
   // Static asset paths for SVGs
   const ringImg = "/src/assets/rings/ring.svg";
@@ -21,6 +26,11 @@
   }
 
   async function handleItemDrop(ring: Ring, item: any) {
+    if (!ring) {
+      chainTree = await createRootRing(chainId, item.create.color);
+      return;
+    }
+
     if (item.create.color) {
       await addChainItem(
         ring.id,
@@ -126,6 +136,6 @@
   {#if chainTree}
     {@render RingNode(chainTree)}
   {:else}
-    <div class="text-white">No chain loaded.</div>
+    <DropZone onDrop={(item) => handleItemDrop(null, item)} />
   {/if}
 </div>

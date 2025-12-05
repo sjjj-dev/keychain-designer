@@ -1,5 +1,4 @@
-from typing import List
-
+from typing import List, Optional
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -61,7 +60,13 @@ def get_user(user_id: uuid.UUID, db: Session = Depends(get_session)):
 
 
 @app.get("/users", response_model=List[UserRead])
-def list_users(db: Session = Depends(get_session)):
+def list_users(email: str | None = None, db: Session = Depends(get_session)):
+    if email:
+        u = crud.get_user_by_email(db, email=email)
+        if not u:
+            raise HTTPException(status_code=404, detail="user not found")
+        return [u]
+
     return crud.get_all_users(db)
 
 

@@ -2,8 +2,11 @@
   import { Button, Input } from "flowbite-svelte";
   import { goto } from "@mateothegreat/svelte5-router";
   import { auth } from "./stores/authStore";
+  import { KeychainAPI } from "./functions/crud";
 
-  let username = "";
+  const api = new KeychainAPI("http://localhost:8000");
+
+  let email = "";
   let error = "";
   let isLoading = false;
 
@@ -11,15 +14,15 @@
     e.preventDefault();
     error = "";
 
-    if (!username.trim()) {
-      error = "Please enter a username.";
+    if (!email.trim()) {
+      error = "Please enter a email.";
       return;
     }
 
     isLoading = true;
     try {
-      // TODO: Call actual login endpoint
-      auth.set({ loggedIn: true, username, password: "" });
+      const user = await api.getUserByEmail(email);
+      auth.set({ loggedIn: true, user_id: user.id, password: "" });
       goto("/dashboard");
     } catch (err) {
       error = err instanceof Error ? err.message : "Login failed";
@@ -38,17 +41,14 @@
 
     <form class="flex flex-col gap-4" on:submit|preventDefault={handleLogin}>
       <div>
-        <label
-          for="username"
-          class="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Username
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+          Email
         </label>
         <Input
-          id="username"
+          id="email"
           type="text"
-          placeholder="Enter your username"
-          bind:value={username}
+          placeholder="Enter your email"
+          bind:value={email}
           disabled={isLoading}
         />
       </div>

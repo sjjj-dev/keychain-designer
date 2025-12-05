@@ -14,15 +14,23 @@
     if (!get(auth).loggedIn) {
       goto("/");
     }
-    getChains();
+    getChains(get(auth).user_id);
   });
 
-  function openDesigner(id?: string) {
+  async function openDesigner(id: string | null = null) {
+    if (!id) {
+      id = (
+        await api.createChain({
+          user_id: get(auth).user_id,
+          name: "New Keychain",
+        })
+      ).id;
+    }
     goto(`/designer/${id}`);
   }
 
-  async function getChains() {
-    let chains = await api.listChains("4d0b150a-e5d0-4ed6-8ecd-c43c34f4866f");
+  async function getChains(userId: string) {
+    let chains = await api.listChains(userId);
     for (let chain of chains) {
       keychains.push({ id: chain.id, name: chain.name });
     }

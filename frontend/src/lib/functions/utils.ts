@@ -35,6 +35,21 @@ export async function getTree(chainId: string): Promise<Ring> {
   return tree;
 }
 
+export async function createRootRing(
+  chainId: string,
+  color: string | null
+): Promise<Ring> {
+  console.log(`Creating root ring for chain ID: ${chainId}`);
+  let ring = await api.createRing({
+    parent_id: null,
+    chain_id: chainId,
+    name: "Root Ring",
+    color: color,
+  });
+  console.log(`Created root ring: ${JSON.stringify(ring)}`);
+  return ring as Ring;
+}
+
 export async function addChainItem(
   parentId: string,
   chainId: string,

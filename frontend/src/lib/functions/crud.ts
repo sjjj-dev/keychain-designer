@@ -118,6 +118,16 @@ class KeychainAPI {
     return this.request(`/users/${userId}`);
   }
 
+  async getUserByEmail(email: string): Promise<UserRead> {
+    const users = await this.request<UserRead[]>(
+      `/users?email=${encodeURIComponent(email)}`
+    );
+    if (users.length === 0) {
+      throw new Error("User not found");
+    }
+    return users[0];
+  }
+
   async listUsers(): Promise<UserRead[]> {
     return this.request("/users");
   }
