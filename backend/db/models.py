@@ -16,14 +16,14 @@ class Chain(Base):
     __tablename__ = "chain"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
-    root_id = Column(UUID(as_uuid=True), ForeignKey("ring.id"))
+    root_id = Column(UUID(as_uuid=True), ForeignKey("ring.id", ondelete="CASCADE"))
     name = Column(String(256), nullable=False)
 
 
 class Ring(Base):
     __tablename__ = "ring"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    parent_id = Column(UUID(as_uuid=True), ForeignKey("ring.id"))
+    parent_id = Column(UUID(as_uuid=True), ForeignKey("ring.id", ondelete="CASCADE"))
     chain_id = Column(UUID(as_uuid=True), ForeignKey("chain.id", ondelete="CASCADE"), nullable=False)
     name = Column(String(256), nullable=False)
     color = Column(String(64), nullable=False)
@@ -32,7 +32,7 @@ class Ring(Base):
 class Key(Base):
     __tablename__ = "key"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    parent_id = Column(UUID(as_uuid=True), ForeignKey("ring.id"))
+    parent_id = Column(UUID(as_uuid=True), ForeignKey("ring.id", ondelete="CASCADE"))
     chain_id = Column(UUID(as_uuid=True), ForeignKey("chain.id", ondelete="CASCADE"), nullable=False)
     name = Column(String(256), nullable=False)
     color = Column(String(64), nullable=False)
@@ -41,7 +41,7 @@ class Key(Base):
 class Charm(Base):
     __tablename__ = "charm"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    parent_id = Column(UUID(as_uuid=True), ForeignKey("ring.id"))
+    parent_id = Column(UUID(as_uuid=True), ForeignKey("ring.id", ondelete="CASCADE"))
     chain_id = Column(UUID(as_uuid=True), ForeignKey("chain.id", ondelete="CASCADE"), nullable=False)
     name = Column(String(256), nullable=False)
     type = Column(String(128), nullable=False)

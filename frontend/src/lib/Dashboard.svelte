@@ -36,7 +36,7 @@
       >+ Create New Keychain</Button
     >
     {#each keychains as kc}
-      <Button color="light" class="w-full" onclick={() => openDesigner(kc.id)}
+      <Button color="dark" class="w-full" onclick={() => openDesigner(kc.id)}
         >{kc.name}</Button
       >
     {/each}

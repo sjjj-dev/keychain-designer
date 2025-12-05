@@ -1,42 +1,34 @@
 <script lang="ts">
-  import { Button, Input } from "flowbite-svelte";
+  import { Button } from "flowbite-svelte";
   import { goto } from "@mateothegreat/svelte5-router";
-  import { auth } from "./stores/authStore";
-  let username = "";
-  let password = "";
-  let error = "";
 
-  function handleLogin(e: Event) {
-    e.preventDefault();
-    if (username.trim()) {
-      auth.set({ loggedIn: true, username, password });
-      goto("/dashboard");
-    } else {
-      error = "Please enter username.";
-    }
+  function handleLoginClick() {
+    goto("/login");
+  }
+
+  function handleSignupClick() {
+    goto("/signup");
   }
 </script>
 
 <main class="flex flex-col items-center justify-center min-h-screen">
-  <h1 class="text-2xl text-blue-500 font-bold mb-4">Keychain Designer Login</h1>
-  <form class="flex flex-col gap-3 w-64" on:submit|preventDefault={handleLogin}>
-    <Input
-      class="border rounded px-2 py-1"
-      type="text"
-      placeholder="Username"
-      bind:value={username}
-    />
-    <Input
-      class="border rounded px-2 py-1"
-      type="password"
-      placeholder="Password"
-      bind:value={password}
-    />
-    {#if error}
-      <div class="text-red-600 text-sm">{error}</div>
-    {/if}
-    <Button color="blue" type="submit">Login</Button>
-  </form>
+  <div class="w-full max-w-md">
+    <h1 class="text-3xl font-bold text-center mb-2 text-blue-600">
+      Keychain Designer
+    </h1>
+    <p class="text-xl font-semibold text-center mb-8 text-gray-700">
+      Create, customize, and organize your perfect keychain
+    </p>
+
+    <div class="flex flex-col gap-4">
+      <Button color="blue" size="lg" class="w-full" onclick={handleLoginClick}>
+        Login
+      </Button>
+      <Button color="dark" size="lg" class="w-full" onclick={handleSignupClick}>
+        Sign Up
+      </Button>
+    </div>
+  </div>
 </main>
 
 <style>
